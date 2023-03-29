@@ -1,11 +1,8 @@
 import { Body, Controller, Post } from '@nestjs/common';
-import { JwtService } from '@nestjs/jwt';
-import { ApiTags } from '@nestjs/swagger';
+import { CreateProfileDto } from 'src/profile/dto/create-profile.dto';
 import { CreateUserDto } from 'src/users/dto/create-user.dto';
 import { AuthService } from './auth.service';
 
-
-@ApiTags('Авторизация')
 @Controller('auth')
 export class AuthController {
 
@@ -17,8 +14,8 @@ export class AuthController {
     }
 
     @Post('/registration')
-    registration(@Body() userDto: CreateUserDto) {
-        return this.authService.registration(userDto);
+    registration(@Body() userDto: CreateUserDto, @Body() profileDto: CreateProfileDto) {
+        return this.authService.registration(userDto, profileDto);
     }
 
 }

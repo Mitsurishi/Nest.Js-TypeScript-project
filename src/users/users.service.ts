@@ -1,5 +1,7 @@
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import { forwardRef, HttpException, HttpStatus, Inject, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
+import { CreateProfileDto } from 'src/profile/dto/create-profile.dto';
+import { ProfileService } from 'src/profile/profile.service';
 import { RolesService } from 'src/roles/roles.service';
 import { AddRoleDto } from './dto/add-role.dto';
 import { BanUserDto } from './dto/ban-user.dto';
@@ -9,13 +11,17 @@ import { User } from './users.model';
 @Injectable()
 export class UsersService {
 
-    constructor(@InjectModel(User) private userRepository: typeof User, private roleService: RolesService) { }
+    constructor(@InjectModel(User) private userRepository: typeof User, private roleService: RolesService,
+        @Inject(forwardRef(() => ProfileService))
+        private profileService: ProfileService) { }
 
-    async createUser(dto: CreateUserDto) {
-        const user = await this.userRepository.create(dto);
+    async createUser(userDto: CreateUserDto, profileDto: CreateProfileDto) {
+        const user = await this.userRepository.create(userDto);
+        const profile = await this.profileService.createProfile(profileDto, userDto);
         const role = await this.roleService.getRoleByValue('User');
         await user.$set('roles', [role.id])
         user.roles = [role]
+        user.profile = profile;
         return user;
     }
 
@@ -26,6 +32,12 @@ export class UsersService {
 
     async getUserByEmail(email: string) {
         const user = await this.userRepository.findOne({ where: { email }, include: { all: true } })
+        return user;
+    }
+
+    async deleteUserById(userId: number) {
+        const id = userId;
+        const user = await this.userRepository.destroy({ where: { id } });
         return user;
     }
 

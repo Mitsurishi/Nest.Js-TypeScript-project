@@ -7,11 +7,12 @@ import { RolesModule } from './roles/roles.module';
 import { Role } from "./roles/roles.model";
 import { UserRoles } from "./roles/user-roles.model";
 import { AuthModule } from './auth/auth.module';
+import { TextBlockModule } from './text-block/text-block.module';
+import { ProfileService } from './profile/profile.service';
+import { ProfileModule } from './profile/profile.module';
 
 
 @Module({
-    controllers: [],
-    providers: [],
     imports: [
         ConfigModule.forRoot({
             envFilePath: `.${process.env.NODE_ENV}.env`
@@ -29,6 +30,8 @@ import { AuthModule } from './auth/auth.module';
         UsersModule,
         RolesModule,
         AuthModule,
+        TextBlockModule,
+        ProfileModule,
     ]
 })
 
