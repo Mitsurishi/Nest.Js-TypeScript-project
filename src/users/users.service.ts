@@ -11,7 +11,8 @@ import { User } from './users.model';
 @Injectable()
 export class UsersService {
 
-    constructor(@InjectModel(User) private userRepository: typeof User, private roleService: RolesService,
+    constructor(@InjectModel(User) private userRepository: typeof User,
+        private roleService: RolesService,
         @Inject(forwardRef(() => ProfileService))
         private profileService: ProfileService) { }
 
@@ -19,8 +20,8 @@ export class UsersService {
         const user = await this.userRepository.create(userDto);
         const profile = await this.profileService.createProfile(profileDto, userDto);
         const role = await this.roleService.getRoleByValue('User');
-        await user.$set('roles', [role.id])
-        user.roles = [role]
+        await user.$set('roles', [role.id]);
+        user.roles = [role];
         user.profile = profile;
         return user;
     }

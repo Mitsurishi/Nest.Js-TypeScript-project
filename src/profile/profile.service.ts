@@ -12,8 +12,8 @@ export class ProfileService {
         @Inject(forwardRef(() => UsersService))
         private usersService: UsersService) { }
 
-    async createProfile(dto: CreateProfileDto, userDto: CreateUserDto) {
-        const profile = await this.profileRepository.create(dto);
+    async createProfile(profileDto: CreateProfileDto, userDto: CreateUserDto) {
+        const profile = await this.profileRepository.create(profileDto);
         const user = await this.usersService.getUserByEmail(userDto.email);
         await profile.update({ userId: user.id });
         return profile;

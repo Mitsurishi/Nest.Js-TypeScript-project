@@ -1,13 +1,19 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { BelongsToMany, Column, DataType, Model, Table } from "sequelize-typescript";
-import { Role } from "src/roles/roles.model";
-import { UserRoles } from "src/roles/user-roles.model";
+import { Column, DataType, HasMany, Model, Table } from "sequelize-typescript";
+import { Files } from "src/file-save/file-save.model";
+
 
 interface TextBlockCreationAttrs {
 
-    email: string;
+    search_name: string;
 
-    password: string;
+    name: string;
+
+    file: string;
+
+    text: string;
+
+    group: string;
 
 }
 
@@ -18,27 +24,27 @@ export class TextBlock extends Model<TextBlock, TextBlockCreationAttrs>{
     @Column({ type: DataType.INTEGER, unique: true, autoIncrement: true, primaryKey: true })
     id: number;
 
-    @ApiProperty({ example: 'user@gmail.com', description: 'Электронная почта' })
+    @ApiProperty({ example: 'Main hero text', description: 'Уникальное имя для поиска' })
     @Column({ type: DataType.STRING, unique: true, allowNull: false })
     search_name: string;
 
-    @ApiProperty({ example: 'user@gmail.com', description: 'Электронная почта' })
-    @Column({ type: DataType.STRING, unique: true, allowNull: false })
-    title: string;
-
-    @ApiProperty({ example: 'qwerty12345', description: 'Пароль' })
+    @ApiProperty({ example: 'Text block name', description: 'Название блока' })
     @Column({ type: DataType.STRING, allowNull: false })
-    picture: string;
+    name: string;
 
-    @ApiProperty({ example: 'true', description: 'Статус блокировки пользователя' })
-    @Column({ type: DataType.BOOLEAN, defaultValue: false })
-    banned: boolean;
+    @ApiProperty({ example: 'picture.jpg', description: 'Имя файла' })
+    @Column({ type: DataType.STRING, allowNull: false })
+    file: string;
 
-    @ApiProperty({ example: 'Нарушение правил', description: 'Причина блокировки' })
-    @Column({ type: DataType.STRING, allowNull: true })
-    banReason: string;
+    @ApiProperty({ example: 'Some text', description: 'Текст блока' })
+    @Column({ type: DataType.STRING, allowNull: false })
+    text: string;
 
-    @BelongsToMany(() => Role, () => UserRoles)
-    roles: Role[];
+    @ApiProperty({ example: 'Main page text', description: 'Группа текстового блока' })
+    @Column({ type: DataType.STRING, allowNull: false })
+    group: string;
 
-}//TODO ALL TEXT-BLOCK FILES
+    @HasMany(() => Files)
+    Files: Files;
+
+}
