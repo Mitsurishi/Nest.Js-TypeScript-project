@@ -14,6 +14,8 @@ export class TextBlockService {
     async createTextBlock(textBlockDto: CreateTextBlockDto, fileDto: CreateFilesSaveDto, fileName_file: any) {
         const textBlock = await this.textBlockRepository.create(textBlockDto);
         const file = await this.fileService.createFile(fileDto, fileName_file);
+        textBlock.file = file.file_name;
+        file.text_block_id = textBlock.id;
         return [textBlock, file];
     }
 
@@ -29,6 +31,12 @@ export class TextBlockService {
 
     async getTextBlockBySearchName(search_name: string) {
         const textBlock = await this.textBlockRepository.findOne({ where: { search_name }, include: { all: true } });
+        return textBlock;
+    }
+
+    async getTextBlockById(textBlockId: string) {
+        const id = textBlockId
+        const textBlock = await this.textBlockRepository.findOne({ where: { id } });
         return textBlock;
     }
 

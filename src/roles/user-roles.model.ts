@@ -6,6 +6,7 @@ import { Role } from "./roles.model";
 @Table({ tableName: 'user_roles', createdAt: false, updatedAt: false })
 export class UserRoles extends Model<UserRoles>{
 
+    @ApiProperty({ example: '1', description: 'Уникальный идентификатор связи роль-пользователь' })
     @Column({ type: DataType.INTEGER, unique: true, autoIncrement: true, primaryKey: true })
     id: number;
 

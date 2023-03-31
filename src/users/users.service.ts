@@ -32,14 +32,20 @@ export class UsersService {
     }
 
     async getUserByEmail(email: string) {
-        const user = await this.userRepository.findOne({ where: { email }, include: { all: true } })
+        const user = await this.userRepository.findOne({ where: { email }, include: { all: true } });
+        return user;
+    }
+
+    async getUserById(userId: number) {
+        const id = userId;
+        const user = await this.userRepository.findOne({ where: { id }, include: { all: true } });
         return user;
     }
 
     async deleteUserById(userId: number) {
         const id = userId;
-        const user = await this.userRepository.destroy({ where: { id } });
-        return user;
+        await this.userRepository.destroy({ where: { id } });
+        return `Пользователь с id ${id} успешно удалён`;
     }
 
     async addRole(dto: AddRoleDto) {

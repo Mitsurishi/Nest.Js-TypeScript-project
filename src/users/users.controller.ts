@@ -8,9 +8,10 @@ import { BanUserDto } from './dto/ban-user.dto';
 import { CreateUserDto } from './dto/create-user.dto';
 import { User } from './users.model';
 import { UsersService } from './users.service';
-import { JwtService } from "@nestjs/jwt";
+import { JwtService } from '@nestjs/jwt';
 import { ProfileService } from 'src/profile/profile.service';
 import { AuthService } from 'src/auth/auth.service';
+import { Profile } from 'src/profile/profile.model';
 
 @ApiTags('Пользователи')
 @Controller('users')
@@ -21,7 +22,7 @@ export class UsersController {
         private authService: AuthService,
         private jwtService: JwtService) { }
 
-    @ApiOperation({ summary: 'Создание пользователя' })
+    @ApiOperation({ summary: 'Создать пользователя' })
     @ApiResponse({ status: 200, type: User })
     @Post()
     create(@Body() userDto: CreateUserDto, @Body() profileDto: CreateProfileDto) {
@@ -38,7 +39,56 @@ export class UsersController {
         return this.usersService.getAllUsers();
     }
 
-    @ApiOperation({ summary: 'Присвоить роль' })
+    @ApiOperation({ summary: 'Получить пользователя по id' })
+    @ApiResponse({ status: 200, type: User })
+    @Roles('Admin')
+    @UseGuards(RolesGuard)
+    @Get('/:id')
+    getOne(@Param('id') userId: number) {
+        return this.usersService.getUserById(userId);
+    }
+
+    @ApiOperation({ summary: 'Удалить пользователя по id' })
+    @ApiResponse({ status: 200, type: User })
+    @Roles('Admin')
+    @UseGuards(RolesGuard)
+    @Delete('/delete/:id')
+    deleteUserById(@Param('id') userId: number) {
+        return this.usersService.deleteUserById(userId);
+    }
+
+    @ApiOperation({ summary: 'Редактировать профиль по id' })
+    @ApiResponse({ status: 200, type: Profile })
+    @Roles('Admin')
+    @UseGuards(RolesGuard)
+    @Put('/edit/:id')
+    editProfileById(@Param('id') userId: number, @Body() profileDto: CreateProfileDto) {
+        return this.profileService.editProfileByUserId(userId, profileDto);
+    }
+
+    @ApiOperation({ summary: 'Редактирование профиля для пользователя' })
+    @ApiResponse({ status: 200, type: Profile })
+    @Roles('User')
+    @UseGuards(RolesGuard)
+    @Put('/edit')
+    editProfile(@Req() req: Request, @Body() profileDto: CreateProfileDto) {
+        const token = req.headers['authorization'].replace('Bearer ', '');
+        const user = this.jwtService.verify(token);
+        return this.profileService.editProfileByUserId(user.id, profileDto);
+    }
+
+    @ApiOperation({ summary: 'Удаление аккаунта для пользователя' })
+    @ApiResponse({ status: 200 })
+    @Roles('User')
+    @UseGuards(RolesGuard)
+    @Delete('/delete')
+    deleteProfile(@Req() req: Request) {
+        const token = req.headers['authorization'].replace('Bearer ', '');
+        const user = this.jwtService.verify(token);
+        return this.usersService.deleteUserById(user.id);
+    }
+
+    @ApiOperation({ summary: 'Присвоить роль пользователю' })
     @ApiResponse({ status: 200 })
     @Roles('Admin')
     @UseGuards(RolesGuard)
@@ -54,37 +104,6 @@ export class UsersController {
     @Post('/ban')
     ban(@Body() dto: BanUserDto) {
         return this.usersService.ban(dto);
-    }
-
-    @Roles('Admin')
-    @UseGuards(RolesGuard)
-    @Delete("/delete/:id")
-    deleteUserById(@Param("id") userId: number) {
-        return this.usersService.deleteUserById(userId);
-    }
-    @Roles('Admin')
-    @UseGuards(RolesGuard)
-    @Put("/edit/:id")
-    editProfileById(@Param('id') userId: number, @Body() profileDto: CreateProfileDto) {
-        return this.profileService.editProfileByUserId(userId, profileDto);
-    }
-
-    @Roles('User')
-    @UseGuards(RolesGuard)
-    @Put('/edit')
-    editProfile(@Req() req: Request, @Body() profileDto: CreateProfileDto) {
-        const token = req.headers['authorization'].replace('Bearer ', '');
-        const user = this.jwtService.verify(token);
-        return this.profileService.editProfileByUserId(user.id, profileDto);
-    }
-
-    @Roles('User')
-    @UseGuards(RolesGuard)
-    @Delete('/delete')
-    deleteProfile(@Req() req: Request) {
-        const token = req.headers['authorization'].replace('Bearer ', '');
-        const user = this.jwtService.verify(token);
-        return this.usersService.deleteUserById(user.id);
     }
 
 }

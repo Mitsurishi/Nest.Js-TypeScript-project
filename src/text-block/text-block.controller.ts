@@ -7,14 +7,18 @@ import { CreateTextBlockDto } from './dto/create-text-block.dto';
 import { CreateFilesSaveDto } from 'src/file-save/dto/create-file-save.dto';
 import { FilesSaveService } from 'src/file-save/file-save.service';
 import { EditTextBlockDto } from './dto/edit-text-block.dto';
+import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { TextBlock } from './text-block.model';
 
-
+@ApiTags('Текстовый блок')
 @Controller('text-block')
 export class TextBlockController {
 
     constructor(private textBlockService: TextBlockService,
         private filesSaveService: FilesSaveService) { }
 
+    @ApiOperation({ summary: 'Создать тектовый блок' })
+    @ApiResponse({ status: 200, type: TextBlock })
     @Roles('Admin')
     @UseGuards(RolesGuard)
     @Post()
@@ -23,6 +27,9 @@ export class TextBlockController {
         const textBlock = this.textBlockService.createTextBlock(textBlockDto, filesDto, file);
         return textBlock;
     }
+
+    @ApiOperation({ summary: 'Получить все тектовые блоки' })
+    @ApiResponse({ status: 200, type: [TextBlock] })
     @Roles('Admin')
     @UseGuards(RolesGuard)
     @Get()
@@ -31,6 +38,8 @@ export class TextBlockController {
         return textBlocks;
     }
 
+    @ApiOperation({ summary: 'Получить тектовые блоки по группе' })
+    @ApiResponse({ status: 200, type: [TextBlock] })
     @Roles('Admin')
     @UseGuards(RolesGuard)
     @Get('/group/:group')
@@ -39,6 +48,9 @@ export class TextBlockController {
         return textBlocks;
     }
 
+
+    @ApiOperation({ summary: 'Получить тектовый блок по уникальному названию для поиска' })
+    @ApiResponse({ status: 200, type: TextBlock })
     @Roles('Admin')
     @UseGuards(RolesGuard)
     @Get('/search/:search_name')
@@ -47,6 +59,8 @@ export class TextBlockController {
         return textBlock;
     }
 
+    @ApiOperation({ summary: 'Редактировать текстовый блок по id' })
+    @ApiResponse({ status: 200 })
     @Roles('Admin')
     @UseGuards(RolesGuard)
     @Put('/:id')
@@ -56,6 +70,8 @@ export class TextBlockController {
         return [textBlock, file];
     }
 
+    @ApiOperation({ summary: 'Удалить текстовый блок по id' })
+    @ApiResponse({ status: 200 })
     @Roles('Admin')
     @UseGuards(RolesGuard)
     @Delete('/:id')

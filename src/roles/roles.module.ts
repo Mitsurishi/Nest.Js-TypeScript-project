@@ -5,6 +5,7 @@ import { RolesController } from './roles.controller';
 import { Role } from './roles.model';
 import { RolesService } from './roles.service';
 import { UserRoles } from './user-roles.model';
+import { AuthModule } from 'src/auth/auth.module';
 
 @Module({
 
@@ -12,7 +13,8 @@ import { UserRoles } from './user-roles.model';
 
   providers: [RolesService],
 
-  imports: [SequelizeModule.forFeature([Role, User, UserRoles])],
+  imports: [SequelizeModule.forFeature([Role, User, UserRoles]),
+    AuthModule],
 
   exports: [RolesService]
 

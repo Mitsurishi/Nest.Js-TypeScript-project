@@ -25,23 +25,23 @@ export class TextBlock extends Model<TextBlock, TextBlockCreationAttrs>{
     id: number;
 
     @ApiProperty({ example: 'Main hero text', description: 'Уникальное имя для поиска' })
-    @Column({ type: DataType.STRING, unique: true, allowNull: false })
+    @Column({ type: DataType.STRING, unique: true, allowNull: true })
     search_name: string;
 
     @ApiProperty({ example: 'Text block name', description: 'Название блока' })
-    @Column({ type: DataType.STRING, allowNull: false })
+    @Column({ type: DataType.STRING, allowNull: true })
     name: string;
 
     @ApiProperty({ example: 'picture.jpg', description: 'Имя файла' })
-    @Column({ type: DataType.STRING, allowNull: false })
+    @Column({ type: DataType.STRING, allowNull: true })
     file: string;
 
     @ApiProperty({ example: 'Some text', description: 'Текст блока' })
-    @Column({ type: DataType.STRING, allowNull: false })
+    @Column({ type: DataType.STRING, allowNull: true })
     text: string;
 
     @ApiProperty({ example: 'Main page text', description: 'Группа текстового блока' })
-    @Column({ type: DataType.STRING, allowNull: false })
+    @Column({ type: DataType.STRING, allowNull: true })
     group: string;
 
     @HasMany(() => Files)

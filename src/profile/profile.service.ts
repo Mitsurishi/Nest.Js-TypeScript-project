@@ -24,9 +24,9 @@ export class ProfileService {
         return profiles;
     }
 
-    async editProfileByUserId(userId: number, dto: CreateProfileDto) {
+    async editProfileByUserId(userId: number, profileDto: CreateProfileDto) {
         const user_Id = userId
-        const profile = await this.profileRepository.update({ name: dto.name, surname: dto.surname, phone: dto.phone }, { where: { userId: user_Id } })
+        const profile = await this.profileRepository.update(profileDto, { where: { userId: user_Id } })
         return profile;
     }
 
