@@ -13,6 +13,6 @@ export class CreateFilesSaveDto {
 
     @ApiProperty({ example: '1', description: 'Id текстового блока' })
     @IsNumber({}, { message: 'Должно быть числом' })
-    readonly text_block_id: number;
+    readonly text_block_id?: number;
 
 }

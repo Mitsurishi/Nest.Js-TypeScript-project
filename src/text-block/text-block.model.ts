@@ -44,7 +44,8 @@ export class TextBlock extends Model<TextBlock, TextBlockCreationAttrs>{
     @Column({ type: DataType.STRING, allowNull: true })
     group: string;
 
+    @ApiProperty({ description: 'Файлы текстового блока', type: [Files] })
     @HasMany(() => Files)
-    Files: Files;
+    Files: Files[];
 
 }

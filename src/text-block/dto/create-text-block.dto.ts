@@ -11,7 +11,7 @@ export class CreateTextBlockDto {
     @IsString({ message: 'Должно быть строкой' })
     readonly name: string;
 
-    @ApiProperty({ example: '/somepath/file.jpg', description: 'Путь до файла прикреплённого к блоку' })
+    @ApiProperty({ example: 'picturejpg', description: 'Имя файла' })
     @IsString({ message: 'Должно быть строкой' })
     readonly file: string;
 

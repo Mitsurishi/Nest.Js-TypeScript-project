@@ -28,12 +28,12 @@ export class Files extends Model<Files, FilesSaveCreationAttrs> {
     essence_id: string;
 
     @ApiProperty({ example: 'Some file name', description: 'Имя файла' })
-    @Column({ type: DataType.STRING })
+    @Column({ type: DataType.STRING, allowNull: true })
     file_name: string;
 
     @ApiProperty({ example: '1', description: 'Id текстового блока' })
     @ForeignKey(() => TextBlock)
-    @Column({ type: DataType.INTEGER })
+    @Column({ type: DataType.INTEGER, allowNull: true })
     text_block_id: number;
 
     @BelongsTo(() => TextBlock)
