@@ -7,7 +7,7 @@ async function start() {
     const app = await NestFactory.create(AppModule)
 
     const config = new DocumentBuilder()
-        .setTitle('Nest.js + TypeScript project for Hotels.ru')
+        .setTitle('Nest.js project')
         .setDescription('Документация REST API')
         .setVersion('1.0.0')
         .addTag('Mitsurishi')
