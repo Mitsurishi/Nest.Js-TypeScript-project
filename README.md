@@ -1,7 +1,7 @@
 <h1 align="center">
 
 
-Nest.Js-TypeScript-project
+NestJs + TypeScript project
 
 
 </h1>
